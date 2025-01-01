@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de sécurisation des biens de valeur </title>
+    <link rel="stylesheet" href="pat.css">
+    <!-- Liaison avec le fichier CSS -->
+</head>
+
+<body>
+    <header>
+        <h1>Système de sécurisation des biens de valeur</h1>
+    </header>
+    <div class="container">
+        <div class="info-box">
+            <h2>Informations de l'Article</h2>
+            <input type="text" id="rfidInput" placeholder="lecture ID RFID" autofocus>
+            <p id="itemName">Nom de l'Article: <span></span></p>
+            <p id="itemPrice">Prix de l'Article: <span></span></p>
+            <p id="exitDoor">Portes de Sortie: <span></span></p>
+            <p id="securityAgent">Agent de Sécurité Principal: <span></span></p>
+            <p id="cashierAgent">Agent de Caisse: <span></span></p>
+            <p id="mainCashier">Caisse Principale: <span></span></p>
+            <p id="exitTime">Heure de Sortie: <span></span></p>
+            <p id="exitDate">Date de Sortie: <span></span></p>
+            <button id="saveButton" style="display:none;">Enregistrer</button>
+            <button id="cancelButton" style="display:none;">Annuler</button>
+            <div id="rfidStatus"></div>
+        </div>
+
+        <table id="savedItemsTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Nom de l'Article</th>
+                    <th>Prix de l'Article</th>
+                    <th>Portes de Sortie</th>
+                    <th>Agent de Sécurité</th>
+                    <th>Agent de Caisse</th>
+                    <th>Caisse Principale</th>
+                    <th>Heure de Sortie</th>
+                    <th>Date de Sortie</th>
+                </tr>
+            </thead>
+            <tbody id="savedItemsList"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const itemData = {
+            '1000232425': {
+                name: 'parfum naomie',
+                price: '100€',
+                exitDoor: 'Porte sortie A',
+                securityAgent: 'patrice BADIBANGA NTUMBA',
+                cashierAgent: 'Cecile UZELE ZAWADI',
+                mainCashier: 'Caisse 1',
+            },
+            '1000333435': {
+                name: 'montre intelligent',
+                price: '150€',
+                exitDoor: 'Porte sortie personnels',
+                securityAgent: 'Paul IKUKU MAKORO',
+                cashierAgent: 'Merveille LIMEME',
+                mainCashier: 'Caisse 2',
+            },
+            '1000444546': {
+                name: 'ordinateur portable',
+                price: '200€',
+                exitDoor: 'Porte sortie C',
+                securityAgent: 'Adam shungu',
+                cashierAgent: 'christelle misanzila',
+                mainCashier: 'Caisse 3',
+            },
+        };
+
+        const rfidInput = document.getElementById('rfidInput');
+        const rfidStatus = document.getElementById('rfidStatus');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const savedItemsList = document.getElementById('savedItemsList');
+        const savedItemsTable = document.getElementById('savedItemsTable');
+
+        let currentItemInfo = {};
+
+        rfidInput.addEventListener('input', function() {
+            const rfidID = rfidInput.value.trim();
+            const itemInfo = itemData[rfidID];
+
+            if (itemInfo) {
+                currentItemInfo = itemInfo;
+                document.getElementById('itemName').querySelector('span').textContent = itemInfo.name;
+                document.getElementById('itemPrice').querySelector('span').textContent = itemInfo.price;
+                document.getElementById('exitDoor').querySelector('span').textContent = itemInfo.exitDoor;
+                document.getElementById('securityAgent').querySelector('span').textContent = itemInfo.securityAgent;
+                document.getElementById('cashierAgent').querySelector('span').textContent = itemInfo.cashierAgent;
+                document.getElementById('mainCashier').querySelector('span').textContent = itemInfo.mainCashier;
+                document.getElementById('exitTime').querySelector('span').textContent = new Date().toLocaleTimeString();
+                document.getElementById('exitDate').querySelector('span').textContent = new Date().toLocaleDateString();
+
+                saveButton.style.display = 'inline';
+                cancelButton.style.display = 'inline';
+                rfidStatus.textContent = `Article détecté: ${itemInfo.name}`;
+                rfidStatus.style.color = '#008000'; // Vert pour succès
+            } else {
+                rfidStatus.textContent = 'ID RFID non reconnu.';
+                rfidStatus.style.color = '#ff0000'; // Rouge pour erreur
+            }
+        });
+
+        saveButton.addEventListener('click', function() {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${currentItemInfo.name}</td>
+                <td>${currentItemInfo.price}</td>
+                <td>${currentItemInfo.exitDoor}</td>
+                <td>${currentItemInfo.securityAgent}</td>
+                <td>${currentItemInfo.cashierAgent}</td>
+                <td>${currentItemInfo.mainCashier}</td>
+                <td>${new Date().toLocaleTimeString()}</td>
+                <td>${new Date().toLocaleDateString()}</td>
+            `;
+            savedItemsList.appendChild(row);
+            savedItemsTable.style.display = 'table';
+            alert('Informations enregistrées avec succès.');
+            clearFields();
+        });
+
+        cancelButton.addEventListener('click', function() {
+            clearFields();
+        });
+
+        function clearFields() {
+            rfidInput.value = '';
+            currentItemInfo = {};
+            document.getElementById('itemName').querySelector('span').textContent = '';
+            document.getElementById('itemPrice').querySelector('span').textContent = '';
+            document.getElementById('exitDoor').querySelector('span').textContent = '';
+            document.getElementById('securityAgent').querySelector('span').textContent = '';
+            document.getElementById('cashierAgent').querySelector('span').textContent = '';
+            document.getElementById('mainCashier').querySelector('span').textContent = '';
+            document.getElementById('exitTime').querySelector('span').textContent = '';
+            document.getElementById('exitDate').querySelector('span').textContent = '';
+            saveButton.style.display = 'none';
+            cancelButton.style.display = 'none';
+            rfidStatus.textContent = '';
+        }
+    </script>
+</body>
+
+</html>
