@@ -85,3 +85,25 @@ tr:hover {
     color: #ff0000;
     /* Rouge pour les erreurs */
 }
+
+
+/* Media Queries pour les écrans mobiles */
+
+@media (max-width: 600px) {
+    header {
+        font-size: 1.5em;
+        /* Ajuster la taille de la police */
+    }
+    .info-box {
+        padding: 10px;
+        /* Réduire le remplissage pour les petits écrans */
+    }
+    button {
+        padding: 10px;
+        /* Ajuster le remplissage des boutons */
+    }
+    table {
+        font-size: 0.9em;
+        /* Réduire la taille de la police dans le tableau */
+    }
+}
